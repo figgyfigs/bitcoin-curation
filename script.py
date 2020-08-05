@@ -8,13 +8,11 @@ class Tweet:
     def __init__(self, info, auth):
         self.height = info['height']
         self.hash = info['id']
-        self.timestamp = info['timestamp']
         self.transactions = info['tx_count']
-        self.size = info['size']
         self.auth = auth
 
     def compose_tweet(self):
-        tweet = "Block: {}\nHash: {}\n# of transactions: {}\nTimeStamp: {}\nSize(KB): {}".format(self.height, self.hash, self.transactions, self.timestamp, self.size)
+        tweet = "Block: {}\n# of transactions: {}".format(self.height, self.transactions,)
         return tweet
 
 
@@ -41,10 +39,30 @@ def block_info():
     block = get_tip_hash()
     response = requests.get('https://blockstream.info/api/block/' + block)
     info = response.json()
-    #temp = Tweet(info)
-    return info
+    print(info)
+    #return info
 
-obj = Tweet(block_info(), authenticate())
+def coinbase_txid():
+    response = requests.get('https://blockstream.info/api/block/' + get_tip_hash() + '/txid/0')
+    txid = response.text
+    return txid
+#Calculates and returns the total fees in a specific block
+#First: Look up the coinbase txid
+#Second: Using the txid look up the tx info
+#Calculate fee per block (vout - 6.25)
+def fees_per_block(txid):
+    response = requests.get('https://blockstream.info/api/tx/' + txid)
+    response = response.json()
+    print(response)
+
+
+#block_info()
+txid = coinbase_txid()
+fees_per_block(txid)
+
+
+
+#obj = Tweet(block_info(), authenticate())
 
 
 #if ERROR MESSAGE is duplicate we can do something with try?
@@ -54,4 +72,4 @@ def main():
     obj.send_tweet()
 
 
-main()
+#main()
