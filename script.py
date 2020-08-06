@@ -3,6 +3,7 @@ import keys
 import tweepy
 import requests
 
+#Class Tweet
 class Tweet:
 
     def __init__(self, info, auth):
