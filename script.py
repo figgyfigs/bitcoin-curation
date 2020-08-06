@@ -3,25 +3,25 @@ import keys
 import tweepy
 import requests
 
+BLOCK_REWARD = 625000000
+
 #Class Tweet
 class Tweet:
 
-    def __init__(self, info, auth):
+    def __init__(self, info, auth, fees):
         self.height = info['height']
         self.hash = info['id']
         self.transactions = info['tx_count']
+        self.fees = fees
         self.auth = auth
 
     def compose_tweet(self):
-        tweet = "Block: {}\n# of transactions: {}".format(self.height, self.transactions,)
+        tweet = "Block: {}\n# of transactions: {}\nFees paid(sats): {}\n#Bitcoin".format(self.height, self.transactions, self.fees)
         return tweet
-
 
     def send_tweet(self):
         tweet = self.compose_tweet()
         self.auth.update_status(tweet)
-        #print(tweet)
-
 
 #Authentication for twitter API
 def authenticate():
@@ -40,26 +40,28 @@ def block_info():
     block = get_tip_hash()
     response = requests.get('https://blockstream.info/api/block/' + block)
     info = response.json()
-    print(info)
-    #return info
+    #print(info)
+    return info
 
 def coinbase_txid():
     response = requests.get('https://blockstream.info/api/block/' + get_tip_hash() + '/txid/0')
     txid = response.text
     return txid
+
 #Calculates and returns the total fees in a specific block
 #First: Look up the coinbase txid
 #Second: Using the txid look up the tx info
 #Calculate fee per block (vout - 6.25)
 def fees_per_block(txid):
     response = requests.get('https://blockstream.info/api/tx/' + txid)
-    response = response.json()
-    print(response)
+    tx_info = response.json()
+    total_reward = tx_info['vout'][0]['value']
+    return total_reward - BLOCK_REWARD
 
 
 #block_info()
-txid = coinbase_txid()
-fees_per_block(txid)
+#txid = coinbase_txid()
+#fees_per_block(txid)
 
 
 
@@ -68,9 +70,11 @@ fees_per_block(txid)
 
 #if ERROR MESSAGE is duplicate we can do something with try?
 def main():
-    #temp = block_info()
+
+    txid = coinbase_txid()
+    obj = Tweet(block_info(), authenticate(), fees_per_block(txid))
     obj.compose_tweet()
     obj.send_tweet()
 
 
-#main()
+main()
