@@ -16,7 +16,7 @@ class Tweet:
         self.auth = auth
 
     def compose_tweet(self):
-        tweet = "Block: {}\n# of transactions: {}\nFees paid(sats): {}\n#Bitcoin".format(self.height, self.transactions, self.fees)
+        tweet = "Block: {}\n# of transactions: {}\nFees paid(sats): {}\n#Bitcoin".format(self.height, self.transactions, format_reward(self.fees))
         return tweet
 
     def send_tweet(self):
@@ -40,7 +40,6 @@ def block_info():
     block = get_tip_hash()
     response = requests.get('https://blockstream.info/api/block/' + block)
     info = response.json()
-    print(info)
     return info
 
 def coinbase_txid():
@@ -56,40 +55,31 @@ def fees_per_block(txid):
     response = requests.get('https://blockstream.info/api/tx/' + txid)
     tx_info = response.json()
     total_reward = tx_info['vout'][0]['value']
-    fees = total_reward - BLOCK_REWARD
-    print(fees)
-    string_fees = str(fees)
-    #might need substring
-    test = string_fees.split(string_fees[1])
-    print(test)
     #return total_reward - BLOCK_REWARD
+    return 192344321
 
+def format_reward(block_fees):
 
-def format_reward(totalFees):
-    totalFees = str(totalFees)
+    block_fees = str(block_fees)
 
-    if len(totalFees) == 9:
-        first_str = totalFees[0:1]
-        second_str = totalFees[1:]
-        final_string = first_str + '.' + second_str
-        print(final_string)
+    if len(block_fees) == 9:
+        first_str = block_fees[0:1]
+        second_str = block_fees[1:]
+        final_str = first_str + '.' + second_str
+        return final_str
 
-block_info()
-txid = coinbase_txid()
-fees_per_block(txid)
-
-
-
-#obj = Tweet(block_info(), authenticate())
+#block_info()
+#txid = coinbase_txid()
+#fees_per_block(txid)
 
 
 #if ERROR MESSAGE is duplicate we can do something with try?
-#def main():
+def main():
 
-    #txid = coinbase_txid()
-    #obj = Tweet(block_info(), authenticate(), fees_per_block(txid))
-    #obj.compose_tweet()
-    #obj.send_tweet()
+    txid = coinbase_txid()
+    obj = Tweet(block_info(), authenticate(), fees_per_block(txid))
+    obj.compose_tweet()
+    obj.send_tweet()
 
 
-#main()
+main()
