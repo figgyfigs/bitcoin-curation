@@ -40,7 +40,7 @@ def block_info():
     block = get_tip_hash()
     response = requests.get('https://blockstream.info/api/block/' + block)
     info = response.json()
-    #print(info)
+    print(info)
     return info
 
 def coinbase_txid():
@@ -56,12 +56,27 @@ def fees_per_block(txid):
     response = requests.get('https://blockstream.info/api/tx/' + txid)
     tx_info = response.json()
     total_reward = tx_info['vout'][0]['value']
-    return total_reward - BLOCK_REWARD
+    fees = total_reward - BLOCK_REWARD
+    print(fees)
+    string_fees = str(fees)
+    #might need substring
+    test = string_fees.split(string_fees[1])
+    print(test)
+    #return total_reward - BLOCK_REWARD
 
 
-#block_info()
-#txid = coinbase_txid()
-#fees_per_block(txid)
+def format_reward(totalFees):
+    totalFees = str(totalFees)
+
+    if len(totalFees) == 9:
+        first_str = totalFees[0:1]
+        second_str = totalFees[1:]
+        final_string = first_str + '.' + second_str
+        print(final_string)
+
+block_info()
+txid = coinbase_txid()
+fees_per_block(txid)
 
 
 
@@ -69,12 +84,12 @@ def fees_per_block(txid):
 
 
 #if ERROR MESSAGE is duplicate we can do something with try?
-def main():
+#def main():
 
-    txid = coinbase_txid()
-    obj = Tweet(block_info(), authenticate(), fees_per_block(txid))
-    obj.compose_tweet()
-    obj.send_tweet()
+    #txid = coinbase_txid()
+    #obj = Tweet(block_info(), authenticate(), fees_per_block(txid))
+    #obj.compose_tweet()
+    #obj.send_tweet()
 
 
-main()
+#main()
