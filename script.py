@@ -58,22 +58,20 @@ def fees_per_block(txid):
     #return total_reward - BLOCK_REWARD
     return 192344321
 
-def format_reward(block_fees):
 
-    block_fees = str(block_fees)
+#Need to add cases that check when the fees is less than a bitcoin(million sats)
+def format_reward(fees):
 
-    if len(block_fees) == 9:
-        first_str = block_fees[0:1]
-        second_str = block_fees[1:]
+    fees  = str(fees)
+
+    if len(fees) == 9:
+        first_str = fees[0:1]
+        second_str = fees[1:]
         final_str = first_str + '.' + second_str
         return final_str
 
-#block_info()
-#txid = coinbase_txid()
-#fees_per_block(txid)
 
 
-#if ERROR MESSAGE is duplicate we can do something with try?
 def main():
 
     txid = coinbase_txid()
