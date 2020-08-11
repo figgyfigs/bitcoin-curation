@@ -55,11 +55,12 @@ def fees_per_block(txid):
     response = requests.get('https://blockstream.info/api/tx/' + txid)
     tx_info = response.json()
     total_reward = tx_info['vout'][0]['value']
+    #print(total_reward - BLOCK_REWARD)
     #return total_reward - BLOCK_REWARD
-    return 192344321
+    return 12345344
 
 
-#Need to add cases that check when the fees is less than a bitcoin(million sats)
+#TODO: Need to add cases that check when the fees is less than a bitcoin(million sats)
 def format_reward(fees):
 
     fees  = str(fees)
@@ -68,6 +69,9 @@ def format_reward(fees):
         first_str = fees[0:1]
         second_str = fees[1:]
         final_str = first_str + '.' + second_str
+        return final_str
+    elif len(fees) == 8:
+        final_str = '.' + fees[0:]
         return final_str
 
 
