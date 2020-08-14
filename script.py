@@ -16,7 +16,7 @@ class Tweet:
         self.auth = auth
 
     def compose_tweet(self):
-        tweet = "Block: {}\n# of transactions: {}\nFees paid(sats): {}\n#Bitcoin".format(self.height, self.transactions, format_reward(self.fees))
+        tweet = "Block: {}\n# of transactions: {}\nFees paid(sats): {}\n#Bitcoin".format(self.height, self.transactions, round(format_reward(self.fees), 2))
         return tweet
 
     def send_tweet(self):
@@ -56,23 +56,22 @@ def fees_per_block(txid):
     tx_info = response.json()
     total_reward = tx_info['vout'][0]['value']
     #print(total_reward - BLOCK_REWARD)
-    #return total_reward - BLOCK_REWARD
-    return 12345344
+    return total_reward - BLOCK_REWARD
 
 
 #TODO: Need to add cases that check when the fees is less than a bitcoin(million sats)
 def format_reward(fees):
 
-    fees  = str(fees)
+    fees = str(fees)
 
     if len(fees) == 9:
         first_str = fees[0:1]
         second_str = fees[1:]
         final_str = first_str + '.' + second_str
-        return final_str
+        return float(final_str)
     elif len(fees) == 8:
         final_str = '.' + fees[0:]
-        return final_str
+        return float(final_str)
 
 
 
