@@ -16,7 +16,7 @@ class Tweet:
         self.auth = auth
 
     def compose_tweet(self):
-        tweet = "Block: {}\n# of transactions: {}\nFees paid(sats): {}\n#Bitcoin".format(self.height, self.transactions, format_reward(self.fees))
+        tweet = "Block: {}\n# of transactions: {}\nFees paid(sats): {}\n#Bitcoin".format(self.height, self.transactions, round(format_reward(self.fees), 2))
         return tweet
 
     def send_tweet(self):
@@ -69,10 +69,10 @@ def format_reward(fees):
         first_str = fees[0:1]
         second_str = fees[1:]
         final_str = first_str + '.' + second_str
-        return final_str
+        return float(final_str)
     elif len(fees) == 8:
         final_str = '.' + fees[0:]
-        return final_str
+        return float(final_str)
 
 
 
