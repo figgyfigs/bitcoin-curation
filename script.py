@@ -3,7 +3,7 @@ import keys
 import tweepy
 import requests
 
-BLOCK_REWARD = 625000000
+
 
 #Class Tweet
 class Tweet:
