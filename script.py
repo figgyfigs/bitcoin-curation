@@ -16,7 +16,7 @@ class Tweet:
         self.auth = auth
 
     def compose_tweet(self):
-        tweet = "Block: {}\n# of transactions: {}\nFees paid(sats): {}\n#Bitcoin".format(self.height, self.transactions, round(format_reward(self.fees), 2))
+        tweet = "Block: {}\n# of transactions: {}\nFees paid: {}\n#Bitcoin".format(self.height, self.transactions, round(format_reward(self.fees), 2))
         return tweet
 
     def send_tweet(self):
@@ -52,6 +52,7 @@ def coinbase_txid():
 #Second: Using the txid look up the tx info
 #Calculate fee per block (vout - 6.25)
 def fees_per_block(txid):
+    BLOCK_REWARD = 625000000
     response = requests.get('https://blockstream.info/api/tx/' + txid)
     tx_info = response.json()
     total_reward = tx_info['vout'][0]['value']
@@ -72,6 +73,10 @@ def format_reward(fees):
     elif len(fees) == 8:
         final_str = '.' + fees[0:]
         return float(final_str)
+    else:
+        final_str = '.0' + fees[0:]
+        return float(final_str)
+
 
 
 
