@@ -3,9 +3,9 @@ import keys
 import tweepy
 import requests
 
+BLOCK_REWARD = 625000000
 
 
-#Class Tweet
 class Tweet:
 
     def __init__(self, info, auth, fees):
@@ -22,6 +22,7 @@ class Tweet:
     def send_tweet(self):
         tweet = self.compose_tweet()
         self.auth.update_status(tweet)
+
 
 #Authentication for twitter API
 def authenticate():
@@ -51,16 +52,24 @@ def coinbase_txid():
 #First: Look up the coinbase txid
 #Second: Using the txid look up the tx info
 #Calculate fee per block (vout - 6.25)
+
+
 def fees_per_block(txid):
-    BLOCK_REWARD = 625000000
     response = requests.get('https://blockstream.info/api/tx/' + txid)
     tx_info = response.json()
     total_reward = tx_info['vout'][0]['value']
-    #print(total_reward - BLOCK_REWARD)
     return total_reward - BLOCK_REWARD
 
 
-#TODO: Need to add cases that check when the fees is less than a bitcoin(million sats)
+def fee_estimates():
+    url = requests.get('https://blockstream.info/api/fee-estimates')
+    response = url.json()
+    print(response)
+
+fee_estimates()
+
+
+#TODO: Test cases that check when the fees is less than a bitcoin
 def format_reward(fees):
 
     fees = str(fees)
@@ -76,8 +85,6 @@ def format_reward(fees):
     else:
         final_str = '.0' + fees[0:]
         return float(final_str)
-
-
 
 
 def main():
