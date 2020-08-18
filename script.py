@@ -60,6 +60,14 @@ def fees_per_block(txid):
     return total_reward - BLOCK_REWARD
 
 
+def fee_estimates():
+    url = requests.get('https://blockstream.info/api/fee-estimates')
+    response = url.json()
+    print(response)
+
+fee_estimates()
+
+
 #TODO: Need to add cases that check when the fees is less than a bitcoin(million sats)
 def format_reward(fees):
 
