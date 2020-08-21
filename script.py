@@ -62,9 +62,13 @@ def fees_per_block(txid):
 
 
 def fee_estimates():
+    fees = []
     url = requests.get('https://blockstream.info/api/fee-estimates')
     response = url.json()
-    print(response)
+    fees.append(response['1'])
+    fees.append(response['6'])
+    fees.append(response['15'])
+    return fees
 
 fee_estimates()
 
@@ -95,4 +99,4 @@ def main():
     obj.send_tweet()
 
 
-main()
+#main()
