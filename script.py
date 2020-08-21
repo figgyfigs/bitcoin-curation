@@ -8,15 +8,16 @@ BLOCK_REWARD = 625000000
 
 class Tweet:
 
-    def __init__(self, info, auth, fees):
+    def __init__(self, info, auth, fees, fee_estimates):
         self.height = info['height']
         self.hash = info['id']
         self.transactions = info['tx_count']
         self.fees = fees
         self.auth = auth
+        self.estimates = fee_estimates
 
     def compose_tweet(self):
-        tweet = "Block: {}\n# of transactions: {}\nFees paid: {}\n#Bitcoin".format(self.height, self.transactions, round(format_reward(self.fees), 2))
+        tweet = "Block: {}\n# of transactions: {}\nFees paid: {}\nNext Block: {}".format(self.height, self.transactions, round(format_reward(self.fees), 2), self.estimates[0])
         return tweet
 
     def send_tweet(self):
@@ -67,7 +68,10 @@ def fee_estimates():
     response = url.json()
     fees.append(response['1'])
     fees.append(response['6'])
-    fees.append(response['15'])
+    fees.append(response['18'])
+    #fees.append(response['36'])
+    #fees.append(response['72'])
+    fees.append(response['144'])
     return fees
 
 fee_estimates()
@@ -94,9 +98,9 @@ def format_reward(fees):
 def main():
 
     txid = coinbase_txid()
-    obj = Tweet(block_info(), authenticate(), fees_per_block(txid))
+    obj = Tweet(block_info(), authenticate(), fees_per_block(txid), fee_estimates())
     obj.compose_tweet()
     obj.send_tweet()
 
 
-#main()
+main()
