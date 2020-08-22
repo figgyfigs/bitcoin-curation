@@ -17,7 +17,7 @@ class Tweet:
         self.estimates = fee_estimates
 
     def compose_tweet(self):
-        tweet = "Block: {}\n# of transactions: {}\nFees paid: {}\nNext Block: {}".format(self.height, self.transactions, round(format_reward(self.fees), 2), self.estimates[0])
+        tweet = "Block: {}\n# of transactions: {}\nFees paid: {}\nNext Block: {}\n1 Hour: {}\n3 Hours: {}".format(self.height, self.transactions, round(format_reward(self.fees), 2), self.estimates[0], self.estimates[1], self.estimates[2])
         return tweet
 
     def send_tweet(self):
