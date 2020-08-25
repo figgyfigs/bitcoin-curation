@@ -17,7 +17,8 @@ class Tweet:
         self.estimates = fee_estimates
 
     def compose_tweet(self):
-        tweet = "Block: {}\n# of transactions: {}\nFees paid: {}\nNext Block: {}\n1 Hour: {}\n3 Hours: {}".format(self.height, self.transactions, round(format_reward(self.fees), 2), self.estimates[0], self.estimates[1], self.estimates[2])
+        tweet = "Block: {}\n# of transactions: {}\nFees paid: {}\n****************************\nNext Block: {}\n1 Hour: {}\n3 Hours: {}\n1 Day: {}".format(
+            self.height, self.transactions, round(format_reward(self.fees), 2), self.estimates[0], self.estimates[1], self.estimates[2], self.estimates[3])
         return tweet
 
     def send_tweet(self):
@@ -66,11 +67,17 @@ def fee_estimates():
     fees = []
     url = requests.get('https://blockstream.info/api/fee-estimates')
     response = url.json()
+    # Next Block confirmation
     fees.append(response['1'])
+    # ~1 Hour Confirmation
     fees.append(response['6'])
+    # ~3 Hour Confirmation
     fees.append(response['18'])
+    # ~6 Hour Confirmation
     #fees.append(response['36'])
+    # ~12 Hour Confirmation
     #fees.append(response['72'])
+    # ~1 Day Confirmation
     fees.append(response['144'])
     return fees
 
