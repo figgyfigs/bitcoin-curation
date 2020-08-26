@@ -17,7 +17,7 @@ class Tweet:
         self.estimates = fee_estimates
 
     def compose_tweet(self):
-        tweet = "Block: {}\n# of transactions: {}\nFees paid: {}\n\nNext Block: {}\n1 Hour: {}\n3 Hours: {}\n1 Day: {}".format(
+        tweet = "Block: {}\n# of transactions: {}\nFees paid: {} BTC\n\nNext Block: {} sat/vB\n1 Hour: {} sat/vB\n3 Hours: {} sat/vB\n1 Day: {} sat/vB".format(
             self.height, self.transactions, round(format_reward(self.fees), 2), self.estimates[0], self.estimates[1], self.estimates[2], self.estimates[3])
         return tweet
 
@@ -76,7 +76,7 @@ def fee_estimates():
     fees.append(response['18'])
     # ~1 Day Confirmation
     fees.append(response['144'])
-    format_fees = [round(x, 2) for x in fees]
+    format_fees = [round(x, 1) for x in fees]
     return format_fees
     #return fees
 
