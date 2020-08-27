@@ -100,6 +100,12 @@ def format_reward(fees):
         final_str = '.0' + fees[0:]
         return float(final_str)
 
+def get_mempool():
+    url = requests.get('https://blockstream.info/api/mempool')
+    response = url.text
+    print(response)
+
+get_mempool()
 
 def main():
 
@@ -109,4 +115,4 @@ def main():
     obj.send_tweet()
 
 
-main()
+#main()
