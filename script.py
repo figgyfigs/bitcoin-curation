@@ -8,17 +8,20 @@ BLOCK_REWARD = 625000000
 
 class Tweet:
 
-    def __init__(self, info, auth, fees, fee_estimates):
+    def __init__(self, info, auth, fees, fee_estimates, mempool):
         self.height = info['height']
         self.hash = info['id']
         self.transactions = info['tx_count']
         self.fees = fees
         self.auth = auth
         self.estimates = fee_estimates
+        self.mempool_tx = mempool['count']
+        self.mempool_fees = mempool['total_fee']
 
     def compose_tweet(self):
-        tweet = "Block: {}\n# of transactions: {}\nFees paid: {} BTC\n\nNext Block: {} sat/vB\n1 Hour: {} sat/vB\n3 Hours: {} sat/vB\n1 Day: {} sat/vB".format(
-            self.height, self.transactions, round(format_reward(self.fees), 2), self.estimates[0], self.estimates[1], self.estimates[2], self.estimates[3])
+        tweet = "Block: {}\n# of transactions: {}\nFees paid: {} BTC\n\nNext Block: {} sat/vB\n1 Hour: {} sat/vB\n3 Hours: {} sat/vB\n1 Day: {} sat/vB\n\n" \
+                    "Mempool Data:\nMempool Transactions: {}\nMempool Fees: {} BTC".format(self.height, self.transactions,
+                        round(format_reward(self.fees), 2), self.estimates[0], self.estimates[1], self.estimates[2], self.estimates[3], self.mempool_tx, round(format_reward(self.mempool_fees), 2))
         return tweet
 
     def send_tweet(self):
@@ -80,8 +83,6 @@ def fee_estimates():
     return format_fees
     #return fees
 
-fee_estimates()
-
 
 #TODO: Test cases that check when the fees is less than a bitcoin
 def format_reward(fees):
@@ -102,17 +103,17 @@ def format_reward(fees):
 
 def get_mempool():
     url = requests.get('https://blockstream.info/api/mempool')
-    response = url.text
-    print(response)
+    mempool = url.json()
+    return mempool
 
 get_mempool()
 
 def main():
 
     txid = coinbase_txid()
-    obj = Tweet(block_info(), authenticate(), fees_per_block(txid), fee_estimates())
+    obj = Tweet(block_info(), authenticate(), fees_per_block(txid), fee_estimates(), get_mempool())
     obj.compose_tweet()
     obj.send_tweet()
 
 
-#main()
+main()
