@@ -36,9 +36,10 @@ def authenticate():
     api = tweepy.API(auth)
     return api
 
-#TODO: This function well check if there is a new block every 5 minutes
-#       If new block is found we check if we didn't miss any previous blocks. This
-#       check is nessecary since blocks are not always found in 10 mins so we could potentially
+#TODO: This function well check if there is a new block every 5 minutes.
+#       * If no new block is found we return and wait
+#       * If new block is found we check if we didn't miss any previous blocks. This
+#       check is necessary since blocks are not always found in 10 minutes so we could potentially
 #       skip a block.
 #       if checks are valid we send out the tweet
 #
