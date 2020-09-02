@@ -106,14 +106,13 @@ def get_mempool():
     mempool = url.json()
     return mempool
 
-get_mempool()
 
 def main():
 
     txid = coinbase_txid()
-    obj = Tweet(block_info(), authenticate(), fees_per_block(txid), fee_estimates(), get_mempool())
-    obj.compose_tweet()
-    obj.send_tweet()
+    tweet = Tweet(block_info(), authenticate(), fees_per_block(txid), fee_estimates(), get_mempool())
+    tweet.compose_tweet()
+    tweet.send_tweet()
 
 
 main()
