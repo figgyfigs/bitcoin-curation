@@ -36,10 +36,22 @@ def authenticate():
     api = tweepy.API(auth)
     return api
 
+#TODO: This function well check if there is a new block every 5 minutes
+#       If new block is found we check if we didn't miss any previous blocks. This
+#       check is nessecary since blocks are not always found in 10 mins so we could potentially
+#       skip a block.
+#       if checks are valid we send out the tweet
+#
+# we needs this check because
+def new_block():
+
+
+
 def get_tip_hash():
     response = requests.get('https://blockstream.info/api/blocks/tip/hash')
     response = response.text
     return response
+
 
 #Returns information about a block.
 def block_info():
@@ -48,14 +60,15 @@ def block_info():
     info = response.json()
     return info
 
+
 def coinbase_txid():
     response = requests.get('https://blockstream.info/api/block/' + get_tip_hash() + '/txid/0')
     txid = response.text
     return txid
 
 #Calculates and returns the total fees in a specific block
-#First: Look up the coinbase txid
-#Second: Using the txid look up the tx info
+#Look up the coinbase txid
+#Using the txid look up the tx info
 #Calculate fee per block (vout - 6.25)
 
 
@@ -68,7 +81,6 @@ def fees_per_block(txid):
 
 def fee_estimates():
     fees = []
-    format_fees = []
     url = requests.get('https://blockstream.info/api/fee-estimates')
     response = url.json()
     # Next Block confirmation
@@ -81,7 +93,6 @@ def fee_estimates():
     fees.append(response['144'])
     format_fees = [round(x, 1) for x in fees]
     return format_fees
-    #return fees
 
 
 #TODO: Test cases that check when the fees is less than a bitcoin
