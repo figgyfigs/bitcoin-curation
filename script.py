@@ -2,6 +2,7 @@
 import keys
 import tweepy
 import requests
+import time
 
 BLOCK_REWARD = 625000000
 
@@ -119,18 +120,15 @@ def get_mempool():
 
 def main():
 
-    begin_program = True
-
-
-    if begin_program:
+    while True:
+        time.sleep(300)
         txid = coinbase_txid()
         tweet = Tweet(block_info(), authenticate(), fees_per_block(txid), fee_estimates(), get_mempool())
-        current_height = tweet.height
-        tweet.compose_tweet()
-        tweet.send_tweet()
-
-begin_program = False
-
-
+        current_block = tweet.height
+        if current_block is not current_block:
+            tweet.compose_tweet()
+            tweet.send_tweet()
+        else:
+            print("No new block")
 
 main()
