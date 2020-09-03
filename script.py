@@ -18,6 +18,7 @@ class Tweet:
         self.mempool_tx = mempool['count']
         self.mempool_fees = mempool['total_fee']
 
+
     def compose_tweet(self):
         tweet = "Block: {}\n# of transactions: {}\nFees paid: {} BTC\n\nNext Block: {} sat/vB\n1 Hour: {} sat/vB\n3 Hours: {} sat/vB\n1 Day: {} sat/vB\n\n" \
                     "Mempool Data:\nMempool Transactions: {}\nMempool Fees: {} BTC".format(self.height, self.transactions,
@@ -42,16 +43,13 @@ def authenticate():
 #       check is necessary since blocks are not always found in 10 minutes so we could potentially
 #       skip a block.
 #       if checks are valid we send out the tweet
-#
-# we needs this check because
-def new_block():
-
-
+def check_block():
+    pass
 
 def get_tip_hash():
     response = requests.get('https://blockstream.info/api/blocks/tip/hash')
-    response = response.text
-    return response
+    tip_hash = response.text
+    return tip_hash
 
 
 #Returns information about a block.
@@ -121,10 +119,18 @@ def get_mempool():
 
 def main():
 
-    txid = coinbase_txid()
-    tweet = Tweet(block_info(), authenticate(), fees_per_block(txid), fee_estimates(), get_mempool())
-    tweet.compose_tweet()
-    tweet.send_tweet()
+    begin_program = True
+
+
+    if begin_program:
+        txid = coinbase_txid()
+        tweet = Tweet(block_info(), authenticate(), fees_per_block(txid), fee_estimates(), get_mempool())
+        current_height = tweet.height
+        tweet.compose_tweet()
+        tweet.send_tweet()
+
+begin_program = False
+
 
 
 main()
