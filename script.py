@@ -20,6 +20,10 @@ class Tweet:
         self.mempool_fees = mempool['total_fee']
 
 
+    def check_block(self):
+        self.height
+
+
     def compose_tweet(self):
         tweet = "Block: {}\n# of transactions: {}\nFees paid: {} BTC\n\nNext Block: {} sat/vB\n1 Hour: {} sat/vB\n3 Hours: {} sat/vB\n1 Day: {} sat/vB\n\n" \
                     "Mempool Data:\nMempool Transactions: {}\nMempool Fees: {} BTC".format(self.height, self.transactions,
@@ -37,6 +41,14 @@ def authenticate():
     auth.set_access_token(keys.ACCESS_TOKEN, keys.ACCESS_TOKEN_SECRET)
     api = tweepy.API(auth)
     return api
+
+#Returns the height of the last block
+def get_height():
+    response = requests.get('https://blockstream.info/api/blocks/tip/height')
+    height = response.json()
+    return height
+
+
 
 #TODO: This function well check if there is a new block every 5 minutes.
 #       * If no new block is found we return and wait
@@ -117,18 +129,43 @@ def get_mempool():
     mempool = url.json()
     return mempool
 
+def new_block():
+    tip = get_height()
+
+
 
 def main():
+    #hard code the start
 
+    block = [0]
     while True:
-        time.sleep(300)
         txid = coinbase_txid()
         tweet = Tweet(block_info(), authenticate(), fees_per_block(txid), fee_estimates(), get_mempool())
-        current_block = tweet.height
-        if current_block is not current_block:
-            tweet.compose_tweet()
-            tweet.send_tweet()
+        block[0] = tweet.height
+        print(block[0])
+        tweet.compose_tweet()
+        tweet.send_tweet()
+        #time.sleep(300)
+        #tip = get_height()
+
+        while True:
+            time.sleep(300)
+            tip = get_height()
+            print("Sending api request.")
+
+            if block[0] < tip:
+                break
+
         else:
-            print("No new block")
+            break
+
+
+
+
+
+
+
+
 
 main()
+
