@@ -107,7 +107,7 @@ def fee_estimates():
     return format_fees
 
 
-#TODO: Test cases that check when the fees is less than a bitcoin
+#TODO: Add test case if fees in mempool are 10 btc or more
 def format_reward(fees):
 
     fees = str(fees)
