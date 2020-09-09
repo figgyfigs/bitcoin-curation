@@ -20,8 +20,8 @@ class Tweet:
         self.mempool_fees = mempool['total_fee']
 
 
-    def check_block(self):
-        self.height
+    #def check_block(self):
+        #self.height
 
 
     def compose_tweet(self):
@@ -124,24 +124,25 @@ def format_reward(fees):
         final_str = '.0' + fees[0:]
         return float(final_str)
 
+
 def get_mempool():
     url = requests.get('https://blockstream.info/api/mempool')
     mempool = url.json()
     return mempool
 
+
 def new_block():
     tip = get_height()
 
 
-
 def main():
-    #hard code the start
 
-    block = [0]
+    block = []
     while True:
         txid = coinbase_txid()
         tweet = Tweet(block_info(), authenticate(), fees_per_block(txid), fee_estimates(), get_mempool())
-        block[0] = tweet.height
+        block.append(tweet.height)
+        #block[0] = tweet.height
         print(block[0])
         tweet.compose_tweet()
         tweet.send_tweet()
