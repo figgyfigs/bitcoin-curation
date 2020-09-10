@@ -18,6 +18,7 @@ class Tweet:
         self.estimates = fee_estimates
         self.mempool_tx = mempool['count']
         self.mempool_fees = mempool['total_fee']
+        self.previous_blockhash = info['previousblockhash']
 
 
     #def check_block(self):
@@ -74,7 +75,8 @@ def block_info():
 
 
 def coinbase_txid():
-    response = requests.get('https://blockstream.info/api/block/' + get_tip_hash() + '/txid/0')
+    tip_hash = get_tip_hash()
+    response = requests.get('https://blockstream.info/api/block/' + tip_hash + '/txid/0')
     txid = response.text
     return txid
 
@@ -131,30 +133,27 @@ def get_mempool():
     return mempool
 
 
-def new_block():
-    tip = get_height()
-
-
 def main():
 
-    block = []
+    block = [0]
     while True:
         txid = coinbase_txid()
         tweet = Tweet(block_info(), authenticate(), fees_per_block(txid), fee_estimates(), get_mempool())
-        block.append(tweet.height)
-        #block[0] = tweet.height
-        print(block[0])
+        #block.append(tweet.height)
+        prev_hash = tweet.previous_blockhash
+        block[0] = tweet.height
+        print(block)
+        print(prev_hash)
         tweet.compose_tweet()
         tweet.send_tweet()
-        #time.sleep(300)
-        #tip = get_height()
 
         while True:
+            print("sleeping zzzzzzzzzzzzz.")
             time.sleep(300)
             tip = get_height()
             print("Sending api request.")
-
             if block[0] < tip:
+
                 break
 
         else:
