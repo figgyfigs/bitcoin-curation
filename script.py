@@ -135,6 +135,11 @@ def get_mempool():
 
 def main():
 
+    #TODO: Blockstream provides a call that gives the hash of a specefic block 
+    #      Knowing the initial block number, I know what the next blocks should be
+    #      Keep blocks future blocks in a list and see if the program is on the right 
+    #       order. If not find what block was skipped and continue.
+
     block = [0]
     while True:
         txid = coinbase_txid()
