@@ -60,12 +60,16 @@ def get_height():
 def check_block():
     pass
 
+#TODO: A function that calls .../api/block-height/{block number}
+# This will receive the hash of a specific block.
+
+#using this function to begin the program and finding the latest hash at tip
 def get_tip_hash():
     response = requests.get('https://blockstream.info/api/blocks/tip/hash')
     tip_hash = response.text
     return tip_hash
 
-
+#TODO: Changing this function to receive a parameter that includes the hash of the block we want to look up
 #Returns information about a block.
 def block_info():
     block = get_tip_hash()
@@ -157,8 +161,8 @@ def main():
             time.sleep(300)
             tip = get_height()
             print("Sending api request.")
-            if block[0] < tip:
 
+            if block[0] < tip:
                 break
 
         else:
