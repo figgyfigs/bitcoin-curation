@@ -18,12 +18,7 @@ class Tweet:
         self.estimates = fee_estimates
         self.mempool_tx = mempool['count']
         self.mempool_fees = mempool['total_fee']
-        self.previous_blockhash = info['previousblockhash']
-
-
-    #def check_block(self):
-        #self.height
-
+        #self.previous_blockhash = info['previousblockhash']
 
     def compose_tweet(self):
         tweet = "Block: {}\n# of transactions: {}\nFees paid: {} BTC\n\nNext Block: {} sat/vB\n1 Hour: {} sat/vB\n3 Hours: {} sat/vB\n1 Day: {} sat/vB\n\n" \
@@ -42,6 +37,7 @@ def authenticate():
     auth.set_access_token(keys.ACCESS_TOKEN, keys.ACCESS_TOKEN_SECRET)
     api = tweepy.API(auth)
     return api
+
 
 #Returns the height of the last block
 def get_height():
@@ -63,7 +59,7 @@ def check_block():
 #TODO: A function that calls .../api/block-height/{block number}
 # This will receive the hash of a specific block.
 
-#using this function to begin the program and finding the latest hash at tip
+#using this function to begin the program. Getting the initial block.
 def get_tip_hash():
     response = requests.get('https://blockstream.info/api/blocks/tip/hash')
     tip_hash = response.text
@@ -136,6 +132,9 @@ def get_mempool():
     mempool = url.json()
     return mempool
 
+def tweet():
+    pass
+
 
 def main():
 
@@ -144,29 +143,42 @@ def main():
     #      Keep blocks future blocks in a list and see if the program is on the right 
     #       order. If not find what block was skipped and continue.
 
-    block = [0]
+    initial_txid = coinbase_txid()
+    initial_tweet = Tweet(block_info(), authenticate(), fees_per_block(initial_txid), fee_estimates(), get_mempool())
+    initial_tweet.compose_tweet()
+    initial_tweet.send_tweet()
+
+    next = initial_tweet.height + 1
+    #block = [0]
     while True:
-        txid = coinbase_txid()
-        tweet = Tweet(block_info(), authenticate(), fees_per_block(txid), fee_estimates(), get_mempool())
-        #block.append(tweet.height)
-        prev_hash = tweet.previous_blockhash
-        block[0] = tweet.height
-        print(block)
-        print(prev_hash)
-        tweet.compose_tweet()
-        tweet.send_tweet()
+        time.sleep(300)
+        current = get_height()
 
-        while True:
-            print("sleeping zzzzzzzzzzzzz.")
-            time.sleep(300)
-            tip = get_height()
-            print("Sending api request.")
+        if current == next:
 
-            if block[0] < tip:
-                break
-
+            txid = coinbase_txid()
+            tweet = Tweet(block_info(), authenticate(), fees_per_block(txid), fee_estimates(), get_mempool())
+            #block.append(tweet.height)
+            #prev_hash = tweet.previous_blockhash
+            #block[0] = tweet.height
+            #print(block)
+            #print(prev_hash)
+            tweet.compose_tweet()
+            tweet.send_tweet()
+            next += 1
         else:
             break
+        #while True:
+            #print("sleeping zzzzzzzzzzzzz.")
+            #time.sleep(300)
+            #tip = get_height()
+            #print("Sending api request.")
+
+            #if block[0] < tip:
+                #break
+
+        #else:
+            #break
 
 
 
