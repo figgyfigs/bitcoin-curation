@@ -149,23 +149,30 @@ def main():
     initial_tweet.send_tweet()
 
     next = initial_tweet.height + 1
+    print(next)
     #block = [0]
     while True:
+        print("Sleeping zzzz")
         time.sleep(300)
         current = get_height()
+        print(current)
 
-        if current == next:
+        while True:
 
-            txid = coinbase_txid()
-            tweet = Tweet(block_info(), authenticate(), fees_per_block(txid), fee_estimates(), get_mempool())
+            if current == next:
+                txid = coinbase_txid()
+                tweet = Tweet(block_info(), authenticate(), fees_per_block(txid), fee_estimates(), get_mempool())
             #block.append(tweet.height)
             #prev_hash = tweet.previous_blockhash
             #block[0] = tweet.height
             #print(block)
             #print(prev_hash)
-            tweet.compose_tweet()
-            tweet.send_tweet()
-            next += 1
+                tweet.compose_tweet()
+                tweet.send_tweet()
+                next += 1
+            else:
+                print("no new block")
+                break
         else:
             break
         #while True:
