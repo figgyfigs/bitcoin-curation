@@ -65,19 +65,20 @@ def get_tip_hash():
 #Returns information about a block.
 
 #This will need to be changed.
-def block_info(block):
-    block_hash = get_block_hash(block)
+def block_info(hash):
+    #block_hash = get_block_hash(block)
     #block = get_tip_hash()
-    response = requests.get('https://blockstream.info/api/block/' + block_hash)
+    response = requests.get('https://blockstream.info/api/block/' + hash)
     info = response.json()
-    print(info)
-    #return info
+    #print(info)
+    return info
 
 #TODO: This will need to be changed as well. Accepting a hash.
-def coinbase_txid():
-    tip_hash = get_tip_hash()
-    response = requests.get('https://blockstream.info/api/block/' + tip_hash + '/txid/0')
+def coinbase_txid(hash):
+    #tip_hash = get_tip_hash()
+    response = requests.get('https://blockstream.info/api/block/' + hash + '/txid/0')
     txid = response.text
+    print(txid)
     return txid
 
 #Calculates and returns the total fees in a specific block
@@ -91,6 +92,7 @@ def fees_per_block(txid):
     tx_info = response.json()
     total_reward = tx_info['vout'][0]['value']
     return total_reward - BLOCK_REWARD
+    #print(total_reward - BLOCK_REWARD)
 
 
 def fee_estimates():
@@ -188,11 +190,33 @@ def main():
             #break
 '''
 
+def start(hash):
+
+    #hash = get_block_hash(x)
+    txid = coinbase_txid(hash)
+    tweet = Tweet(block_info(hash), authenticate(), fees_per_block(txid), fee_estimates(), get_mempool())
+    tweet.compose_tweet()
+    tweet.send_tweet()
+
+
+
 def main():
 
+    initial_block = get_tip_hash()
+    #print(initial_block)
+    start(initial_block)
 
-    #hash = get_block_hash(1)
-    block_info(0)
+'''
+    while True:
+        break
+
+        hash = get_block_hash(648795)
+        txid = coinbase_txid(hash)
+        tweet = Tweet(block_info(hash), authenticate(), fees_per_block(txid), fee_estimates(), get_mempool())
+        tweet.compose_tweet()
+        tweet.send_tweet()
+'''
+
 
 
 
