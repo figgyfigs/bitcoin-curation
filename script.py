@@ -46,15 +46,11 @@ def get_height():
     return height
 
 
-
-#TODO: This function well check if there is a new block every 5 minutes.
-#       * If no new block is found we return and wait
-#       * If new block is found we check if we didn't miss any previous blocks. This
-#       check is necessary since blocks are not always found in 10 minutes so we could potentially
-#       skip a block.
-#       if checks are valid we send out the tweet
-def check_block():
-    pass
+def get_block_hash(block):
+    response = requests.get('https://blockstream.info/api/block-height/' + str(block))
+    block_hash = response.text
+    print(block_hash)
+    return block_hash
 
 #TODO: A function that calls .../api/block-height/{block number}
 # This will receive the hash of a specific block.
@@ -67,13 +63,15 @@ def get_tip_hash():
 
 #TODO: Changing this function to receive a parameter that includes the hash of the block we want to look up
 #Returns information about a block.
+
+#This will need to be changed.
 def block_info():
     block = get_tip_hash()
     response = requests.get('https://blockstream.info/api/block/' + block)
     info = response.json()
     return info
 
-
+#TODO: This will need to be changed as well. Accepting a hash.
 def coinbase_txid():
     tip_hash = get_tip_hash()
     response = requests.get('https://blockstream.info/api/block/' + tip_hash + '/txid/0')
@@ -135,12 +133,12 @@ def get_mempool():
 def tweet():
     pass
 
-
+'''
 def main():
 
     #TODO: Blockstream provides a call that gives the hash of a specefic block 
     #      Knowing the initial block number, I know what the next blocks should be
-    #      Keep blocks future blocks in a list and see if the program is on the right 
+    #      Keep future blocks in a list and see if the program is on the right 
     #       order. If not find what block was skipped and continue.
 
     initial_txid = coinbase_txid()
@@ -186,9 +184,12 @@ def main():
 
         #else:
             #break
+'''
+
+def main():
 
 
-
+    get_block_hash(1)
 
 
 
