@@ -65,11 +65,13 @@ def get_tip_hash():
 #Returns information about a block.
 
 #This will need to be changed.
-def block_info():
-    block = get_tip_hash()
-    response = requests.get('https://blockstream.info/api/block/' + block)
+def block_info(block):
+    block_hash = get_block_hash(block)
+    #block = get_tip_hash()
+    response = requests.get('https://blockstream.info/api/block/' + block_hash)
     info = response.json()
-    return info
+    print(info)
+    #return info
 
 #TODO: This will need to be changed as well. Accepting a hash.
 def coinbase_txid():
@@ -189,7 +191,8 @@ def main():
 def main():
 
 
-    get_block_hash(1)
+    #hash = get_block_hash(1)
+    block_info(0)
 
 
 
