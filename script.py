@@ -197,6 +197,7 @@ def start(hash):
     tweet = Tweet(block_info(hash), authenticate(), fees_per_block(txid), fee_estimates(), get_mempool())
     tweet.compose_tweet()
     tweet.send_tweet()
+    return tweet.height
 
 
 
@@ -204,18 +205,28 @@ def main():
 
     initial_block = get_tip_hash()
     #print(initial_block)
-    start(initial_block)
+    block = start(initial_block)
+    block += 1
 
-'''
     while True:
-        break
+        print("Sleeping for 3 minutes.")
+        time.sleep(180)
 
-        hash = get_block_hash(648795)
-        txid = coinbase_txid(hash)
-        tweet = Tweet(block_info(hash), authenticate(), fees_per_block(txid), fee_estimates(), get_mempool())
-        tweet.compose_tweet()
-        tweet.send_tweet()
-'''
+        while True:
+
+            tip_hash = get_block_hash(block)
+
+            if next == 'Block not found':
+                print("No block found.")
+                break
+            else:
+                txid = coinbase_txid(tip_hash)
+                tweet = Tweet(block_info(tip_hash), authenticate(), fees_per_block(txid), fee_estimates(), get_mempool())
+                tweet.compose_tweet()
+                tweet.send_tweet()
+
+
+
 
 
 
