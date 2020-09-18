@@ -22,7 +22,7 @@ class Tweet:
 
     def compose_tweet(self):
         tweet = "Block: {}\n# of transactions: {}\nFees paid: {} BTC\n\nNext Block: {} sat/vB\n1 Hour: {} sat/vB\n3 Hours: {} sat/vB\n1 Day: {} sat/vB\n\n" \
-                    "Mempool Data:\nMempool Transactions: {}\nMempool Fees: {} BTC".format(self.height, self.transactions,
+                    "Mempool Data:\nMempool Transactions: {}\nMempool Fees: {} BTC\n#Bitcoin".format(self.height, self.transactions,
                         round(format_reward(self.fees), 2), self.estimates[0], self.estimates[1], self.estimates[2], self.estimates[3], self.mempool_tx, round(format_reward(self.mempool_fees), 2))
         return tweet
 
@@ -78,7 +78,6 @@ def coinbase_txid(hash):
     #tip_hash = get_tip_hash()
     response = requests.get('https://blockstream.info/api/block/' + hash + '/txid/0')
     txid = response.text
-    print(txid)
     return txid
 
 #Calculates and returns the total fees in a specific block
@@ -209,21 +208,24 @@ def main():
     block += 1
 
     while True:
-        print("Sleeping for 3 minutes.")
-        time.sleep(180)
+        print("Sleeping for 5 mins.")
+        time.sleep(300)
 
-        while True:
+        check_hash = get_block_hash(block)
 
-            tip_hash = get_block_hash(block)
-
-            if next == 'Block not found':
-                print("No block found.")
-                break
-            else:
-                txid = coinbase_txid(tip_hash)
-                tweet = Tweet(block_info(tip_hash), authenticate(), fees_per_block(txid), fee_estimates(), get_mempool())
-                tweet.compose_tweet()
-                tweet.send_tweet()
+        if check_hash == 'Block not found':
+            print("No block found.")
+            #break
+        #i believe im getting the error here.
+        elif check_hash is not 'Block not found':
+            txid = coinbase_txid(check_hash)
+            tweet = Tweet(block_info(check_hash), authenticate(), fees_per_block(txid), fee_estimates(), get_mempool())
+            tweet.compose_tweet()
+            tweet.send_tweet()
+            block += 1
+            print("block is " + str(block))
+        else:
+            break
 
 
 
