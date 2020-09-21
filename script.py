@@ -133,61 +133,6 @@ def get_mempool():
     mempool = url.json()
     return mempool
 
-def tweet():
-    pass
-
-'''
-def main():
-
-    #TODO: Blockstream provides a call that gives the hash of a specefic block 
-    #      Knowing the initial block number, I know what the next blocks should be
-    #      Keep future blocks in a list and see if the program is on the right 
-    #       order. If not find what block was skipped and continue.
-
-    initial_txid = coinbase_txid()
-    initial_tweet = Tweet(block_info(), authenticate(), fees_per_block(initial_txid), fee_estimates(), get_mempool())
-    initial_tweet.compose_tweet()
-    initial_tweet.send_tweet()
-
-    next = initial_tweet.height + 1
-    print(next)
-    #block = [0]
-    while True:
-        print("Sleeping zzzz")
-        time.sleep(300)
-        current = get_height()
-        print(current)
-
-        while True:
-
-            if current == next:
-                txid = coinbase_txid()
-                tweet = Tweet(block_info(), authenticate(), fees_per_block(txid), fee_estimates(), get_mempool())
-            #block.append(tweet.height)
-            #prev_hash = tweet.previous_blockhash
-            #block[0] = tweet.height
-            #print(block)
-            #print(prev_hash)
-                tweet.compose_tweet()
-                tweet.send_tweet()
-                next += 1
-            else:
-                print("no new block")
-                break
-        else:
-            break
-        #while True:
-            #print("sleeping zzzzzzzzzzzzz.")
-            #time.sleep(300)
-            #tip = get_height()
-            #print("Sending api request.")
-
-            #if block[0] < tip:
-                #break
-
-        #else:
-            #break
-'''
 
 def start(hash):
 
