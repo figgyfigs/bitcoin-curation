@@ -91,7 +91,6 @@ def fees_per_block(txid):
     tx_info = response.json()
     total_reward = tx_info['vout'][0]['value']
     return total_reward - BLOCK_REWARD
-    #print(total_reward - BLOCK_REWARD)
 
 
 def fee_estimates():
@@ -114,8 +113,13 @@ def fee_estimates():
 def format_reward(fees):
 
     fees = str(fees)
-
-    if len(fees) == 9:
+    #Check if fees are greater than or equal to 10btc
+    if len(fees) == 10:
+        first_str = fees[0:2]
+        second_str = fees[2:]
+        final_str = first_str + '.' + second_str
+        return float(final_str)
+    elif len(fees) == 9:
         first_str = fees[0:1]
         second_str = fees[1:]
         final_str = first_str + '.' + second_str
