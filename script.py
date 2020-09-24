@@ -52,8 +52,6 @@ def get_block_hash(block):
     print(block_hash)
     return block_hash
 
-#TODO: A function that calls .../api/block-height/{block number}
-# This will receive the hash of a specific block.
 
 #using this function to begin the program. Getting the initial block.
 def get_tip_hash():
@@ -61,10 +59,7 @@ def get_tip_hash():
     tip_hash = response.text
     return tip_hash
 
-#TODO: Changing this function to receive a parameter that includes the hash of the block we want to look up
-#Returns information about a block.
 
-#This will need to be changed.
 def block_info(hash):
     #block_hash = get_block_hash(block)
     #block = get_tip_hash()
@@ -73,7 +68,7 @@ def block_info(hash):
     #print(info)
     return info
 
-#TODO: This will need to be changed as well. Accepting a hash.
+
 def coinbase_txid(hash):
     #tip_hash = get_tip_hash()
     response = requests.get('https://blockstream.info/api/block/' + hash + '/txid/0')
@@ -83,9 +78,7 @@ def coinbase_txid(hash):
 #Calculates and returns the total fees in a specific block
 #Look up the coinbase txid
 #Using the txid look up the tx info
-#Calculate fee per block (vout - 6.25)
-
-
+#Calculate fee per block (vout - 625000000)
 def fees_per_block(txid):
     response = requests.get('https://blockstream.info/api/tx/' + txid)
     tx_info = response.json()
