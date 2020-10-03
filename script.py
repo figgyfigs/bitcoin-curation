@@ -131,6 +131,7 @@ def get_mempool():
     return mempool
 
 
+#This function returns the height once the program runs for the first time. This will help to keep track of what needs to come next.
 def start(hash):
 
     #hash = get_block_hash(x)
@@ -156,8 +157,6 @@ def main():
         check_hash = get_block_hash(block)
 
         if check_hash == 'Block not found':
-            print("No block found.")
-            #break
         #i believe im getting the error here.
         elif check_hash is not 'Block not found':
             txid = coinbase_txid(check_hash)
