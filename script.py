@@ -155,7 +155,7 @@ def main():
         time.sleep(300)
 
         check_hash = get_block_hash(block)
-        if check_hash is not 'Block not found':
+        if check_hash != 'Block not found':
             txid = coinbase_txid(check_hash)
             tweet = Tweet(block_info(check_hash), authenticate(), fees_per_block(txid), fee_estimates(), get_mempool())
             tweet.compose_tweet()
