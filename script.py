@@ -161,9 +161,9 @@ def main():
             tweet.compose_tweet()
             tweet.send_tweet()
             block += 1
-            print("block is " + str(block))
+            print("Next block we're looking for " + str(block))
         else:
-            break
+            continue
 
 
 
