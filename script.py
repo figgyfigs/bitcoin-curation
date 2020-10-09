@@ -22,7 +22,7 @@ class Tweet:
 
     def compose_tweet(self):
         tweet = "Block: {}\n# of transactions: {}\nFees paid: {} BTC\n\nNext Block: {} sat/vB\n1 Hour: {} sat/vB\n3 Hours: {} sat/vB\n1 Day: {} sat/vB\n\n" \
-                    "Mempool Data:\nMempool Transactions: {}\nMempool Fees: {} BTC\n#Bitcoin".format(self.height, self.transactions,
+                    "\nMempool Transactions: {}\nMempool Fees: {} BTC\n#Bitcoin".format(self.height, self.transactions,
                         round(format_reward(self.fees), 2), self.estimates[0], self.estimates[1], self.estimates[2], self.estimates[3], self.mempool_tx, round(format_reward(self.mempool_fees), 2))
         return tweet
 
